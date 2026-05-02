@@ -484,8 +484,6 @@ export default function TreatmentDetail() {
                 >
                   <FiPhone className="w-4 h-4" /> {siteData.contact.phone}
                 </a>
-
-                )}
               </div>
 
               {/* Related Doctors */}
