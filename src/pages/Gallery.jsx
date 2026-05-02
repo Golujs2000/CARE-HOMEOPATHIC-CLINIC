@@ -21,7 +21,7 @@ export default function Gallery() {
   const { images, loading } = useGallery(activeFolderId)
 
   // Common tags found in image names (can be expanded)
-  const TAGS = ['All', 'Doctor', 'Clinic', 'Happy Patient', 'Awards', 'Home', 'Reception', 'Cabin', 'OT', 'Ward']
+  const TAGS = ['All', 'Doctor', 'Clinic', 'Happy Patient', 'Awards', 'Reception']
 
   useEffect(() => {
     getFolders().then(data => {
