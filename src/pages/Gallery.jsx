@@ -21,7 +21,7 @@ export default function Gallery() {
   const { images, loading } = useGallery(activeFolderId)
 
   // Common tags found in image names (can be expanded)
-  const TAGS = ['All', 'Doctor', 'Clinic', 'Happy Patient', 'Reception', 'Cabin', 'OT', 'Ward']
+  const TAGS = ['All', 'Doctor', 'Clinic', 'Happy Patient', 'Awards', 'Home', 'Reception', 'Cabin', 'OT', 'Ward']
 
   useEffect(() => {
     getFolders().then(data => {
@@ -60,20 +60,23 @@ export default function Gallery() {
       const t = selectedTag.toLowerCase()
       result = result.filter(img => {
         const title = img.title?.toLowerCase() || ''
-        const folder = folders.find(f => f.id === img.folderId)
+        const folder = folders.length > 0 ? folders.find(f => f.id === img.folderId) : null
         const folderName = folder?.name?.toLowerCase() || ''
 
-        // Check title match
-        const matchesTitle = (t === 'doctor')
-          ? (title.includes('doctor') || title.includes('dr') || title.includes('staff'))
-          : (t === 'happy patient')
-            ? (title.includes('happy') || title.includes('patient') || title.includes('feedback'))
-            : title.includes(t)
+        // Special case for 'Doctor'
+        if (t === 'doctor') {
+          return title.includes('doctor') || title.includes('dr') || title.includes('staff') || 
+                 folderName.includes('doctor') || folderName.includes('dr') || folderName.includes('staff')
+        }
 
-        // Check folder name match
-        const matchesFolder = folderName.includes(t) || (t === 'doctor' && (folderName.includes('dr') || folderName.includes('staff')))
+        // Special case for 'Happy Patient'
+        if (t === 'happy patient') {
+          return title.includes('happy') || title.includes('patient') || title.includes('feedback') ||
+                 folderName.includes('happy') || folderName.includes('patient')
+        }
 
-        return matchesTitle || matchesFolder
+        // General match for both title and folder name
+        return title.includes(t) || folderName.includes(t)
       })
     }
 
@@ -91,13 +94,31 @@ export default function Gallery() {
           
           if (aIsDoctor && !bIsDoctor) return -1
           if (!aIsDoctor && bIsDoctor) return 1
-          return (a.order ?? 999) - (b.order ?? 999)
+          
+          // If neither is doctor OR both are doctors, sort by title
+          const titleA = a.title?.toLowerCase() || ''
+          const titleB = b.title?.toLowerCase() || ''
+          return titleA.localeCompare(titleB)
+        })
+      } else {
+        // If no doctor folder found, just sort everything by title
+        result.sort((a, b) => {
+          const titleA = a.title?.toLowerCase() || ''
+          const titleB = b.title?.toLowerCase() || ''
+          return titleA.localeCompare(titleB)
         })
       }
+    } else {
+      // Even in specific folders, sort by title
+      result.sort((a, b) => {
+        const titleA = a.title?.toLowerCase() || ''
+        const titleB = b.title?.toLowerCase() || ''
+        return titleA.localeCompare(titleB)
+      })
     }
 
     return result
-  }, [images, folders, activeFolderId, searchQuery])
+  }, [images, folders, activeFolderId, searchQuery, selectedTag])
 
   const openLightbox = (i) => setLightbox(i)
   const closeLightbox = () => setLightbox(null)
@@ -125,61 +146,10 @@ export default function Gallery() {
       <div className="bg-white border-b border-gray-100 sticky top-[64px] z-30 shadow-sm">
         <div className="container-max px-4 md:px-8 py-4">
           <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-            {/* Category Tabs */}
-            <div className="flex items-center gap-4 overflow-x-auto no-scrollbar pb-2 md:pb-0">
-              <span className="text-gray-900 text-sm font-bold whitespace-nowrap">Type:</span>
-              <div className="flex gap-2">
-                <button
-                  onClick={() => setActiveFolderId('')}
-                  className={`px-5 py-2 rounded-full text-sm font-medium whitespace-nowrap transition-all ${
-                    activeFolderId === ''
-                      ? 'bg-primary-600 text-white shadow-md'
-                      : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
-                  }`}
-                >
-                  All Categories
-                </button>
-                {folders.map((folder) => (
-                  <button
-                    key={folder.id}
-                    onClick={() => setActiveFolderId(folder.id)}
-                    className={`px-5 py-2 rounded-full text-sm font-medium whitespace-nowrap transition-all ${
-                      activeFolderId === folder.id
-                        ? 'bg-primary-600 text-white shadow-md'
-                        : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
-                    }`}
-                  >
-                    {folder.name}
-                  </button>
-                ))}
-              </div>
-            </div>
-
-            {/* Search Subfilter */}
-            <div className="relative max-w-xs w-full">
-              <input
-                type="text"
-                placeholder="Search images..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full bg-gray-100 border-none rounded-full py-2 pl-10 pr-4 text-sm focus:ring-2 focus:ring-primary-500 transition-all outline-none"
-              />
-              <svg className="absolute left-3 top-2.5 h-4 w-4 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-              </svg>
-              {searchQuery && (
-                <button
-                  onClick={() => setSearchQuery('')}
-                  className="absolute right-3 top-2.5 text-gray-400 hover:text-gray-600"
-                >
-                  <FiX size={14} />
-                </button>
-              )}
-            </div>
           </div>
 
           {/* Subfilter (Tags based on Name) */}
-          <div className="flex items-center gap-4 mt-6 pt-6 border-t border-gray-100 overflow-x-auto no-scrollbar">
+          <div className="flex items-center gap-4 overflow-x-auto no-scrollbar">
             <span className="text-gray-400 text-[11px] font-bold tracking-widest uppercase whitespace-nowrap">Filter by Name:</span>
             <div className="flex gap-2">
               {TAGS.map(tag => (
