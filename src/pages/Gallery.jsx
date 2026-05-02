@@ -80,42 +80,29 @@ export default function Gallery() {
       })
     }
 
-    // 3. Apply Doctor Priority (only if no specific folder is selected)
-    if (activeFolderId === '') {
-      const doctorFolder = folders.find(f => {
-        const name = f.name?.toLowerCase() || '';
-        return name.includes('doctor') || name.includes('dr');
-      })
+    // 3. Multi-Category Priority Sorting (when in "All" view)
+    const getPriority = (img) => {
+      const folder = folders.find(f => f.id === img.folderId)
+      const folderName = folder?.name?.toLowerCase() || ''
       
-      if (doctorFolder) {
-        result.sort((a, b) => {
-          const aIsDoctor = a.folderId === doctorFolder.id
-          const bIsDoctor = b.folderId === doctorFolder.id
-          
-          if (aIsDoctor && !bIsDoctor) return -1
-          if (!aIsDoctor && bIsDoctor) return 1
-          
-          // If neither is doctor OR both are doctors, sort by title
-          const titleA = a.title?.toLowerCase() || ''
-          const titleB = b.title?.toLowerCase() || ''
-          return titleA.localeCompare(titleB)
-        })
-      } else {
-        // If no doctor folder found, just sort everything by title
-        result.sort((a, b) => {
-          const titleA = a.title?.toLowerCase() || ''
-          const titleB = b.title?.toLowerCase() || ''
-          return titleA.localeCompare(titleB)
-        })
-      }
-    } else {
-      // Even in specific folders, sort by title
-      result.sort((a, b) => {
-        const titleA = a.title?.toLowerCase() || ''
-        const titleB = b.title?.toLowerCase() || ''
-        return titleA.localeCompare(titleB)
-      })
+      if (folderName.includes('doctor') || folderName.includes('dr') || folderName.includes('staff')) return 1
+      if (folderName.includes('clinic')) return 2
+      if (folderName.includes('happy patient') || folderName.includes('patient')) return 3
+      if (folderName.includes('award')) return 4
+      return 10 // Everything else
     }
+
+    result.sort((a, b) => {
+      const pA = getPriority(a)
+      const pB = getPriority(b)
+      
+      if (pA !== pB) return pA - pB
+      
+      // If same priority, sort by title
+      const titleA = a.title?.toLowerCase() || ''
+      const titleB = b.title?.toLowerCase() || ''
+      return titleA.localeCompare(titleB)
+    })
 
     return result
   }, [images, folders, activeFolderId, searchQuery, selectedTag])
