@@ -68,7 +68,7 @@ export default function ServicesSection() {
                     {/* Icon box */}
                     <div className="w-14 h-14 rounded-[5px] border-2 border-primary-100 bg-primary-50 flex items-center justify-center flex-shrink-0 group-hover:bg-primary-100 transition-colors">
                       {isEmoji ? (
-                        <span className="text-2xl leading-none">{spec.icon}</span>
+                        <span className="text-3xl leading-none">{spec.icon}</span>
                       ) : Icon ? (
                         <Icon className="w-6 h-6 text-primary-700" />
                       ) : (

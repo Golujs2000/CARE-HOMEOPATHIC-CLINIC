@@ -194,7 +194,7 @@ export default function Footer() {
                     to={`/services/${spec.slug}`}
                     className={`inline-flex items-center gap-1.5 font-heading font-bold text-xs uppercase tracking-wider mb-3 border-b pb-2 w-full ${color} hover:opacity-80 transition-opacity`}
                   >
-                    {spec.icon && <span className="text-base leading-none">{spec.icon}</span>}
+                    {spec.icon && <span className="text-xl leading-none">{spec.icon}</span>}
                     {spec.name}
                   </Link>
 
