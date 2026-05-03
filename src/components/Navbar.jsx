@@ -240,6 +240,9 @@ export default function Navbar() {
                 <span className="text-navy-900 font-hindi font-bold text-lg md:text-xl leading-none group-hover:text-primary-600 transition-colors">
                   केयर होम्योपैथिक क्लिनिक
                 </span>
+                <span className="text-navy-800 text-[11px] md:text-[13px] font-bold mt-0.5">
+                  Panchwati Chowk, Saharsa
+                </span>
                 <span className="text-primary-500 text-[10px] md:text-[11px] font-semibold italic hidden sm:block leading-tight mt-1">
                   The highest ideal of cure is <br /> rapid, gentle and permanent restoration of the health
                 </span>

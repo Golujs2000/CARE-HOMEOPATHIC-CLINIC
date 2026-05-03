@@ -123,7 +123,7 @@ export default function Footer() {
               {quickLinks.map(({ label, to }) => (
                 <li key={to}>
                   <Link to={to}
-                    className="text-sm text-gray-400 hover:text-primary-300 transition-colors flex items-center gap-2 group">
+                    className="text-sm text-white/90 hover:text-white transition-colors flex items-center gap-2 group">
                     <FiChevronRight className="w-3 h-3 text-primary-500 group-hover:translate-x-0.5 transition-transform shrink-0" />
                     {label}
                   </Link>
@@ -138,7 +138,7 @@ export default function Footer() {
             <ul className="space-y-4 text-sm">
               <li className="flex gap-3">
                 <FiMapPin className="w-4 h-4 text-primary-400 mt-0.5 shrink-0" />
-                <span className="text-gray-400">{siteData.contact.address}</span>
+                <span className="text-white/90">{siteData.contact.address}</span>
               </li>
               <li className="flex gap-3 items-start">
                 <FiPhone className="w-4 h-4 text-primary-400 mt-0.5 shrink-0" />
@@ -147,7 +147,7 @@ export default function Footer() {
                     .filter(Boolean)
                     .map((ph) => (
                       <a key={ph} href={`tel:${ph}`}
-                        className="block text-gray-400 hover:text-white transition-colors">
+                        className="block text-white/90 hover:text-white transition-colors">
                         {ph}
                       </a>
                     ))}
@@ -156,14 +156,14 @@ export default function Footer() {
               <li className="flex gap-3 items-center">
                 <FiMail className="w-4 h-4 text-primary-400 shrink-0" />
                 <a href={`mailto:${siteData.contact.email}`}
-                  className="text-gray-400 hover:text-white transition-colors break-all">
+                  className="text-white/90 hover:text-white transition-colors break-all">
                   {siteData.contact.email}
                 </a>
               </li>
               <li className="flex gap-3">
                 <div className="flex items-center gap-2">
-                  <FiClock className="text-gray-400" />
-                  <p className="text-gray-400">{siteData.contact.hours}</p>
+                  <FiClock className="text-white/60" />
+                  <p className="text-white/90">{siteData.contact.hours}</p>
                 </div>
               </li>
             </ul>
@@ -204,9 +204,9 @@ export default function Footer() {
                       <li key={i}>
                         <Link
                           to={`/services/${spec.slug}/treatment/${t.slug}`}
-                          className="text-xs text-gray-500 hover:text-primary-300 transition-colors flex items-start gap-1.5 group"
+                          className="text-xs text-white/80 hover:text-white transition-colors flex items-start gap-1.5 group"
                         >
-                          <span className="w-1 h-1 rounded-full bg-gray-600 group-hover:bg-primary-400 mt-1.5 shrink-0 transition-colors" />
+                          <span className="w-1 h-1 rounded-full bg-white/40 group-hover:bg-primary-400 mt-1.5 shrink-0 transition-colors" />
                           {t.name}
                         </Link>
                       </li>
@@ -260,7 +260,7 @@ export default function Footer() {
                     </div>
                   )}
                   <div className="min-w-0">
-                    <p className="text-xs font-semibold text-gray-300 group-hover:text-primary-300 transition-colors truncate leading-tight">
+                    <p className="text-xs font-semibold text-white group-hover:text-primary-300 transition-colors truncate leading-tight">
                       {doctor.name}
                     </p>
                     {doctor.specialty && (
@@ -282,13 +282,13 @@ export default function Footer() {
 
       {/* ── Bottom bar ── */}
       <div className="border-t border-white/10">
-        <div className="container-max px-4 md:px-8 py-5 flex flex-col md:flex-row items-center justify-between gap-3 text-xs text-gray-500">
+        <div className="container-max px-4 md:px-8 py-5 flex flex-col md:flex-row items-center justify-between gap-3 text-xs text-white/50">
           <p>© {new Date().getFullYear()} {siteData.name}. All rights reserved.</p>
           <div className="flex flex-wrap items-center gap-4">
             {legalLinks.map(({ label, to }) => (
-              <Link key={to} to={to} className="hover:text-gray-300 transition-colors">{label}</Link>
+              <Link key={to} to={to} className="hover:text-white transition-colors">{label}</Link>
             ))}
-            <Link to="/admin/login" className="hover:text-gray-300 transition-colors">Admin</Link>
+            <Link to="/admin/login" className="hover:text-white transition-colors">Admin</Link>
           </div>
         </div>
       </div>
